@@ -5,11 +5,11 @@ from com.mjp.cellular_automata.cell_grid import CellGrid
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
-screen.fill("black")
+screen.fill("purple")
 clock = pygame.time.Clock()
 running = True
 cellGrid = CellGrid(50, 50)
-gridList = cellGrid.initGrid(screen)
+gridList = cellGrid.init_grid(screen)
 pygame.display.flip()
 
 while running:

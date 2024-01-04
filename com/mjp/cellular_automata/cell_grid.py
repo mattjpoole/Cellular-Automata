@@ -1,3 +1,4 @@
+import random
 import pygame
 
 class CellGrid:
@@ -8,23 +9,31 @@ class CellGrid:
         self.width = width
         self.height = height
 
-    def initGrid(self, screen) -> list:
+    def init_grid(self, screen) -> list:
+        """Create a random staring pattern of cells"""
         total = self.width * self.height
-        rectWidthHeight = 10
-        gridList = []
+        rect_width_height = 10
+        grid_list = []
         i = 0
+        j = 0
         top = left = i
         while i<total:
-            cell = pygame.draw.rect(screen, [255, 255, 255, 255], [top, left, rectWidthHeight, rectWidthHeight])
-            gridList.append(cell)
+            if random.randint(0, 1) == 1:
+                colour = [255, 255, 255, 255]
+            else:
+                colour = [0, 0, 0, 255]
+            cell = pygame.draw.rect(screen, colour, [left, top, rect_width_height, rect_width_height])
+            grid_list.append(cell)
             i += 1
-            top = i * rectWidthHeight
-            left = i * rectWidthHeight
+            if i % self.width == 0:
+                j += 1
+            left = (i % self.width) * rect_width_height
+            top = j * rect_width_height
+            print()
 
-        return gridList
-
-    
-    def applyRules() -> None:
+        return grid_list
+ 
+    def apply_rules(self) -> None:
         """Method to apply Conways Game of life rules each tick"""
         #Any live cell with fewer than two live neighbours dies, as if by underpopulation
         #Any live cell with two or three live neighbours lives on to the next generation
