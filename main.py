@@ -23,7 +23,10 @@ while running:
     #screen.fill("black")
 
     # flip() the display to put your work on screen
-    # pygame.display.flip()
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        cellGrid.run_rules(gridList, screen)
+        pygame.display.flip()
 
     # limits FPS to 60
     clock.tick(60)
