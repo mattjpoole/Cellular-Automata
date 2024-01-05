@@ -2,6 +2,8 @@ import pygame
 
 class Cell:
 
+    SIZE = 8
+
     def __init__(self, alive, rect, out_of_bounds=False):
         self.alive = alive
         self.rect = rect

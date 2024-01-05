@@ -8,7 +8,7 @@ screen = pygame.display.set_mode((1280, 720))
 screen.fill("purple")
 clock = pygame.time.Clock()
 running = True
-cellGrid = CellGrid(50, 50)
+cellGrid = CellGrid(15, 15)
 gridList = cellGrid.init_grid(screen)
 pygame.display.flip()
 
@@ -19,13 +19,14 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # fill the screen with a color to wipe away anything from last frame
-    #screen.fill("black")
 
     # flip() the display to put your work on screen
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         cellGrid.run_rules(gridList, screen)
+        pygame.display.flip()
+    if keys[pygame.K_i]:
+        gridList = cellGrid.init_grid(screen)
         pygame.display.flip()
 
     # limits FPS to 60
