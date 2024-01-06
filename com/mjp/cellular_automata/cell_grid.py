@@ -14,24 +14,26 @@ class CellGrid:
         """Create a random staring pattern of cells"""
         total = self.width * self.height
         grid_list = []
-        i = 0
-        j = 0
-        top = left = i
+        column = top = left = cell_num = row = 0
         alive = True
-        while i<total:
-            if random.randint(0, 1) == 0:#1:
-                colour = [255, 255, 255, 255]
+        while cell_num<total:
+            if random.randint(0, 1) == 0:
+                colour = Cell.COLOUR_ALIVE
                 alive = True
             else:
-                colour = [0, 0, 0, 255]
+                colour = Cell.COLOUR_DEAD
                 alive = False
             rect = pygame.draw.rect(screen, colour, [left, top, Cell.SIZE, Cell.SIZE])
-            grid_list.append(Cell(alive, rect))
-            i += 1
-            if i % self.width == 0:
-                j += 1
-            left = (i % self.width) * Cell.SIZE
-            top = j * Cell.SIZE
+            cell = Cell(alive, rect)
+            cell.set_coords(column, row)
+            grid_list.append(cell)
+            # prepare for next loop
+            cell_num += 1
+            column = cell_num % self.width
+            if column == 0:
+                row += 1
+            left = column * Cell.SIZE
+            top = row * Cell.SIZE
 
         return grid_list
  
@@ -48,14 +50,13 @@ class CellGrid:
                     if cell.is_alive():
                         alive_neighbours += 1
         
-            if kernel.is_alive(): 
+            if kernel.is_alive():
                 #check alive neighbours
                 if alive_neighbours < 2 or alive_neighbours >3:
                     #Any live cell with fewer than two live neighbours dies, as if by underpopulation
                     #Any live cell with greter than three live neighbours dies, as if by overpopulation
                     print ("kernel: "+str(i)+" dies")
                     kernel.set_alive(False)
-                    #screen.fill("black", kernel)
                     screen.fill("white", kernel)
                 else:
                     #Any live cell with two or three live neighbours lives on to the next generation
@@ -65,7 +66,6 @@ class CellGrid:
                     #Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction
                     print ("kernel: "+str(i)+" comes alive")
                     kernel.set_alive(True)
-                    #screen.fill("white", kernel)
                     screen.fill("black", kernel)
             alive_neighbours = 0
             i += 1
@@ -75,27 +75,38 @@ class CellGrid:
         """Method to select neighbouring cells for give cell"""
         out_of_bounds_rect = pygame.Rect(0,0,0,0)
         top_left = top_middle = top_right = middle_left = middle_right = bottom_left = bottom_middle = bottom_right = Cell(False, out_of_bounds_rect, True)
+        kernel = grid_list[cell_index]
         try:
-            if cell_index-self.width>0:
-                print("cell_index: "+str(cell_index)+" "+str(cell_index%self.width))
-                if (cell_index%self.width>0):
-                    top_left = grid_list[cell_index-self.width-1]
+            # if we are not at the top edge
+            if kernel.get_row()>0:
                 top_middle = grid_list[cell_index-self.width]
-                if (cell_index%self.width<self.width):
-                    top_right = grid_list[cell_index-self.width+1]
-            if cell_index-1 >= 0:
-                if (cell_index%self.width>0):
-                    middle_left = grid_list[cell_index-1]
-            if cell_index+1 < self.width*self.height:
-                if (cell_index%self.width<self.width):
-                    middle_right = grid_list[cell_index+1]
-            if cell_index+self.width<self.width*self.height+1:
-                if (cell_index%self.width>0):
-                    bottom_left = grid_list[cell_index+self.width-1]
+                # and we are not at the left edge
+                if kernel.get_column()>0:
+                    top_left = grid_list[cell_index-self.width+1]
+                # and we are not at the right edge
+                if kernel.get_column()<self.width-1:
+                    top_right = grid_list[cell_index-self.width-1]
+            
+            # if we are not on the left edge
+            if kernel.get_column()>0:
+                middle_left = grid_list[cell_index-1]
+            # if we are not on the right edge
+            if kernel.get_column()<self.width-1:
+                middle_right = grid_list[cell_index+1]
+            
+            # if we are not the bottom edge
+            if kernel.get_row() < self.height-1:
                 bottom_middle = grid_list[cell_index+self.width]
-                if (cell_index%self.width<self.width):
+                # and we are not on the left edge
+                if kernel.get_column()>0:
+                    bottom_left = grid_list[cell_index+self.width-1]
+                # and we are not at the right edge
+                if (kernel.get_column()<self.width-1):
                     bottom_right = grid_list[cell_index+self.width+1]
+
         except IndexError:
-            print("cell index out of bounds")
+            print("cell index out of bounds ====")
+            print("kernel.get_column()"+str(kernel.get_column()))
+            print("kernel.get_row()"+str(kernel.get_row()))
         neighbours = [top_left, top_middle, top_right, middle_left, middle_right, bottom_left, bottom_middle, bottom_right]
-        return neighbours   
+        return neighbours

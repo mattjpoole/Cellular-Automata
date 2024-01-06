@@ -8,7 +8,7 @@ screen = pygame.display.set_mode((1280, 720))
 screen.fill("purple")
 clock = pygame.time.Clock()
 running = True
-cellGrid = CellGrid(15, 15)
+cellGrid = CellGrid(70, 10)
 gridList = cellGrid.init_grid(screen)
 pygame.display.flip()
 
@@ -19,8 +19,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-
-    # flip() the display to put your work on screen
+    # run the gane rules or re-init per tick
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         cellGrid.run_rules(gridList, screen)
