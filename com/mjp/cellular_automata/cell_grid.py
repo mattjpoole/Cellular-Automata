@@ -9,22 +9,15 @@ class CellGrid:
         """Initialise the class and screen object"""
         self.width = width
         self.height = height
-
+    
     def init_grid(self, screen) -> list:
-        """Create a random staring pattern of cells"""
+        """Create a feild of dead cells ready to recoeve a pattern"""
         total = self.width * self.height
         grid_list = []
         column = top = left = cell_num = row = 0
-        alive = True
         while cell_num<total:
-            if random.randint(0, 1) == 0:
-                colour = Cell.COLOUR_ALIVE
-                alive = True
-            else:
-                colour = Cell.COLOUR_DEAD
-                alive = False
-            rect = pygame.draw.rect(screen, colour, [left, top, Cell.SIZE, Cell.SIZE])
-            cell = Cell(alive, rect)
+            rect = pygame.draw.rect(screen, Cell.COLOUR_DEAD, [left, top, Cell.SIZE, Cell.SIZE])
+            cell = Cell(False, rect)
             cell.set_coords(column, row)
             grid_list.append(cell)
             # prepare for next loop
@@ -34,9 +27,18 @@ class CellGrid:
                 row += 1
             left = column * Cell.SIZE
             top = row * Cell.SIZE
-
         return grid_list
- 
+    
+    def set_random_pattern(self, grid_list, screen) -> None:
+        """set a random pattern on the grid""" 
+        i = 0
+        while i < len(grid_list):
+            kernel : Cell = grid_list[i]
+            if random.randint(0, 1) == 0:
+                kernel.set_alive(True)
+                screen.fill("black", kernel.get_rect())
+            i += 1
+
     def run_rules(self, grid_list, screen) -> None:
         """Method to apply Conways Game of life rules each tick"""
         i = 0
@@ -57,7 +59,7 @@ class CellGrid:
                     #Any live cell with greter than three live neighbours dies, as if by overpopulation
                     print ("kernel: "+str(i)+" dies")
                     kernel.set_alive(False)
-                    screen.fill("white", kernel)
+                    screen.fill("white", kernel.get_rect())
                 else:
                     #Any live cell with two or three live neighbours lives on to the next generation
                     print ("kernel: "+str(i)+" lives on")
@@ -66,7 +68,7 @@ class CellGrid:
                     #Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction
                     print ("kernel: "+str(i)+" comes alive")
                     kernel.set_alive(True)
-                    screen.fill("black", kernel)
+                    screen.fill("black", kernel.get_rect())
             alive_neighbours = 0
             i += 1
 
@@ -90,6 +92,7 @@ class CellGrid:
             # if we are not on the left edge
             if kernel.get_column()>0:
                 middle_left = grid_list[cell_index-1]
+             
             # if we are not on the right edge
             if kernel.get_column()<self.width-1:
                 middle_right = grid_list[cell_index+1]

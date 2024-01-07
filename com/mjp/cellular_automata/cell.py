@@ -3,8 +3,8 @@ import pygame
 class Cell:
 
     SIZE = 8
-    COLOUR_ALIVE = [255, 255, 255, 255]
-    COLOUR_DEAD = [0, 0, 0, 255]
+    COLOUR_ALIVE = [0, 0, 0, 255]
+    COLOUR_DEAD = [255, 255, 255, 255]
 
 
     def __init__(self, alive, rect, out_of_bounds=False):

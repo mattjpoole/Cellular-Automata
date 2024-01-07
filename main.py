@@ -8,8 +8,9 @@ screen = pygame.display.set_mode((1280, 720))
 screen.fill("purple")
 clock = pygame.time.Clock()
 running = True
-cellGrid = CellGrid(70, 10)
+cellGrid = CellGrid(50, 50)
 gridList = cellGrid.init_grid(screen)
+cellGrid.set_random_pattern(gridList, screen)
 pygame.display.flip()
 
 while running:
