@@ -1,6 +1,7 @@
 import random
 import pygame
 from com.mjp.cellular_automata.cell import Cell
+from com.mjp.cellular_automata.grid_rect import GridRect
 
 class CellGrid:
     """A utility class for updating the grid of cells according to Conways Game of Life rules"""
@@ -29,14 +30,15 @@ class CellGrid:
             top = row * Cell.SIZE
         return grid_list
     
-    def set_random_pattern(self, grid_list, screen) -> None:
+    def set_random_pattern(self, grid_list, screen, grid_rect:GridRect) -> None:
         """set a random pattern on the grid""" 
         i = 0
         while i < len(grid_list):
             kernel : Cell = grid_list[i]
-            if random.randint(0, 1) == 0:
-                kernel.set_alive(True)
-                screen.fill("black", kernel.get_rect())
+            if (grid_rect.contains_cell(kernel)):
+                if random.randint(0, 1) == 0:
+                    kernel.set_alive(True)
+                    screen.fill("black", kernel.get_rect())
             i += 1
    
     def reset_grid(self, grid_list, screen) -> None:
