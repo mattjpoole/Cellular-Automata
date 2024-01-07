@@ -1,6 +1,7 @@
 # main file for Cellular Automata using Conways Game of life
 import pygame
 from com.mjp.cellular_automata.cell_grid import CellGrid
+from com.mjp.cellular_automata.grid_rect import GridRect
 
 # pygame setup
 pygame.init()
@@ -8,9 +9,16 @@ screen = pygame.display.set_mode((1280, 720))
 screen.fill("purple")
 clock = pygame.time.Clock()
 running = True
-cellGrid = CellGrid(50, 50)
+width = 50
+height = 50
+cellGrid = CellGrid(width, height)
 gridList = cellGrid.init_grid(screen)
-cellGrid.set_random_pattern(gridList, screen)
+# use full cell grid
+#grid_rect = GridRect(0,0,width, height)
+# use smaller grid
+grid_rect = GridRect(20, 20, 30, 30)
+cellGrid.set_random_pattern(gridList, screen, grid_rect)
+
 pygame.display.flip()
 
 while running:
@@ -27,7 +35,7 @@ while running:
         pygame.display.flip()
     if keys[pygame.K_i]:
         cellGrid.reset_grid(gridList, screen)
-        cellGrid.set_random_pattern(gridList, screen)
+        cellGrid.set_random_pattern(gridList, screen, grid_rect)
         pygame.display.flip()
 
     # limits FPS to 60
