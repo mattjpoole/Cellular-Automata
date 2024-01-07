@@ -1,5 +1,6 @@
 # main file for Cellular Automata using Conways Game of life
 import pygame
+import pygame_gui
 from com.mjp.cellular_automata.cell_grid import CellGrid
 from com.mjp.cellular_automata.grid_rect import GridRect
 
@@ -9,6 +10,21 @@ screen = pygame.display.set_mode((1280, 720))
 screen.fill("purple")
 clock = pygame.time.Clock()
 running = True
+
+# gui set up
+ui_manager = pygame_gui.UIManager((1280, 720))
+reset_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 670), (100, 50)),
+                                             text='RESET',
+                                             manager=ui_manager)
+run_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((100, 670), (100, 50)),
+                                             text='RUN',
+                                             manager=ui_manager)
+pause_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((200, 670), (100, 50)),
+                                             text='PAUSE',
+                                             manager=ui_manager)
+
+# app set up
+rules_running = False
 width = 50
 height = 50
 cellGrid = CellGrid(width, height)
@@ -22,23 +38,32 @@ cellGrid.set_random_pattern(gridList, screen, grid_rect)
 pygame.display.flip()
 
 while running:
+    # limits FPS to 60
+    time_delta = clock.tick(60)/1000.0
+
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element == reset_button:
+                cellGrid.reset_grid(gridList, screen)
+                cellGrid.set_random_pattern(gridList, screen, grid_rect)
+            if event.ui_element == run_button:
+                rules_running = True
+            if event.ui_element == pause_button:
+                rules_running = False
+        ui_manager.process_events(event)
 
     # run the gane rules or re-init per tick
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
+    if rules_running:
         cellGrid.run_rules(gridList, screen)
-        pygame.display.flip()
-    if keys[pygame.K_i]:
-        cellGrid.reset_grid(gridList, screen)
-        cellGrid.set_random_pattern(gridList, screen, grid_rect)
-        pygame.display.flip()
 
-    # limits FPS to 60
-    clock.tick(60)
+    ui_manager.update(time_delta)
+    ui_manager.draw_ui(screen)
+    pygame.display.flip()
+    
 
 pygame.quit()
