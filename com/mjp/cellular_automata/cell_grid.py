@@ -38,7 +38,16 @@ class CellGrid:
                 kernel.set_alive(True)
                 screen.fill("black", kernel.get_rect())
             i += 1
-
+   
+    def reset_grid(self, grid_list, screen) -> None:
+        """reset the grid to an empty state""" 
+        i = 0
+        while i < len(grid_list):
+            kernel : Cell = grid_list[i]
+            kernel.set_alive(False)
+            screen.fill("white", kernel.get_rect())
+            i += 1
+        
     def run_rules(self, grid_list, screen) -> None:
         """Method to apply Conways Game of life rules each tick"""
         i = 0

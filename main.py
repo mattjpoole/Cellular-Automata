@@ -26,7 +26,8 @@ while running:
         cellGrid.run_rules(gridList, screen)
         pygame.display.flip()
     if keys[pygame.K_i]:
-        gridList = cellGrid.init_grid(screen)
+        cellGrid.reset_grid(gridList, screen)
+        cellGrid.set_random_pattern(gridList, screen)
         pygame.display.flip()
 
     # limits FPS to 60
