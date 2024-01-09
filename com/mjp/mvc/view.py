@@ -9,7 +9,7 @@ class GraphicalView(object):
     Draws the model state onto the screen.
     """
 
-    def __init__(self, evManager, model):
+    def __init__(self, evManager, model, screen):
         """
         evManager (EventManager): Allows posting messages to the event queue.
         model (GameEngine): a strong reference to the game Model.
@@ -20,11 +20,11 @@ class GraphicalView(object):
         clock (pygame.time.Clock): keeps the fps constant.
         """
         
-        self.evManager = evManager
+        self.evManager:EventManager = evManager
         evManager.RegisterListener(self)
         self.model = model
         self.isinitialized = False
-        self.screen = None
+        self.screen = screen
         self.clock = None
         self.width = None
         self.height = None
@@ -52,7 +52,7 @@ class GraphicalView(object):
         Draw the current game state on screen.
         Does nothing if isinitialized == False (pygame.init failed)
         """
-        
+
         if not self.isinitialized:
             return
 
@@ -67,9 +67,7 @@ class GraphicalView(object):
         Set up the pygame graphical display and loads graphical resources.
         """
 
-        pygame.init()
-        pygame.display.set_caption('demo game')
-        self.screen = pygame.display.set_mode((1280, 720))
+        pygame.display.set_caption('Game of Life')
         self.clock = pygame.time.Clock()
         self.isinitialized = True
 

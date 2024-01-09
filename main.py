@@ -6,15 +6,11 @@ from com.mjp.cellular_automata.grid_rect import GridRect
 from com.mjp.mvc.controller import Keyboard
 from com.mjp.mvc.eventmanager import *
 from com.mjp.mvc.model import GameEngine
-from com.mjp.mvc.view import GraphicalView
+from com.mjp.mvc.view import GraphicalView 
+from com.mjp.mvc.ui_controls import UIControls
 
-# pygame setup
 
-"""pygame.init()
-
-screen = pygame.display.set_mode((1280, 720))
-screen.fill("purple")
-clock = pygame.time.Clock()
+"""clock = pygame.time.Clock()
 running = True
 
 
@@ -42,12 +38,18 @@ gridList = cellGrid.init_grid(screen)
 grid_rect = GridRect(20, 20, 30, 30)
 cellGrid.set_random_pattern(gridList, screen, grid_rect)
 """
+# pygame setup
+pygame.init()
 
-#example MVC set up
+screen = pygame.display.set_mode((1280, 720))
+screen.fill("purple")
+
+# MVC set up
 evManager = EventManager()
 gamemodel = GameEngine(evManager)
 keyboard = Keyboard(evManager, gamemodel)
-graphics = GraphicalView(evManager, gamemodel)
+buttons = UIControls(evManager, gamemodel, screen)
+graphics = GraphicalView(evManager, gamemodel, screen)
 gamemodel.run()
 
 """

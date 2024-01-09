@@ -33,8 +33,10 @@ class GameEngine(object):
         This pumps a Tick event into the message queue for each loop.
         The loop ends when this object hears a QuitEvent in notify(). 
         """
+        
         self.running = True
         self.evManager.Post(InitializeEvent())
+
         while self.running:
             newTick = TickEvent()
             self.evManager.Post(newTick)
