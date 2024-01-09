@@ -3,13 +3,20 @@ import pygame
 import pygame_gui
 from com.mjp.cellular_automata.cell_grid import CellGrid
 from com.mjp.cellular_automata.grid_rect import GridRect
+from com.mjp.mvc.controller import Keyboard
+from com.mjp.mvc.eventmanager import *
+from com.mjp.mvc.model import GameEngine
+from com.mjp.mvc.view import GraphicalView
 
 # pygame setup
-pygame.init()
+
+"""pygame.init()
+
 screen = pygame.display.set_mode((1280, 720))
 screen.fill("purple")
 clock = pygame.time.Clock()
 running = True
+
 
 # gui set up
 ui_manager = pygame_gui.UIManager((1280, 720))
@@ -30,11 +37,20 @@ height = 50
 cellGrid = CellGrid(width, height)
 gridList = cellGrid.init_grid(screen)
 # use full cell grid
-#grid_rect = GridRect(0,0,width, height)
+# grid_rect = GridRect(0,0,width, height)
 # use smaller grid
 grid_rect = GridRect(20, 20, 30, 30)
 cellGrid.set_random_pattern(gridList, screen, grid_rect)
+"""
 
+#example MVC set up
+evManager = EventManager()
+gamemodel = GameEngine(evManager)
+keyboard = Keyboard(evManager, gamemodel)
+graphics = GraphicalView(evManager, gamemodel)
+gamemodel.run()
+
+"""
 pygame.display.flip()
 
 while running:
@@ -66,4 +82,4 @@ while running:
     pygame.display.flip()
     
 
-pygame.quit()
+pygame.quit()"""
